@@ -12,7 +12,7 @@ MAX_POINTS = 5
 MAX_PERCENT = 100
 
 
-def add_points_by_character(character):
+def add_points_by_character(character, scores):
     if character is not None:
         for key in scores:
             for i in range(6):

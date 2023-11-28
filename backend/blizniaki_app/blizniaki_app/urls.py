@@ -22,5 +22,6 @@ from core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/upload/', views.FaceUploadView.as_view(), name="upload"),
-    path('api/quiz/', views.QuizUploadView.as_view(), name="quiz")
+    path('api/quiz/', views.QuizUploadView.as_view(), name="quiz"),
+    path('api/report/', views.DownloadReportView.as_view(), name="report"),
 ]
