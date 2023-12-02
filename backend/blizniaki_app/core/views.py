@@ -1,16 +1,15 @@
 import os
 from wsgiref.util import FileWrapper
 
-from django.http import HttpResponse, JsonResponse, FileResponse
-from rest_framework.generics import CreateAPIView
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-from blizniaki_app import settings
 from core.models import Face
 from core.neurons.predictor import predict
 from core.serializer import FaceSerializer
 from core.utils.report import create_report
+from django.http import HttpResponse, JsonResponse
+from rest_framework.generics import CreateAPIView
+from rest_framework.views import APIView
+
+from blizniaki_app import settings
 
 
 class FaceUploadView(CreateAPIView):
