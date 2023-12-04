@@ -2,7 +2,6 @@ FROM python:3.9
 
 WORKDIR /backend
 
-# Skopiuj pliki projektu do katalogu roboczego
 COPY . /backend
 RUN pip install --no-cache-dir -r backend/requirements.txt
 
@@ -14,9 +13,18 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install opencv-python torch torchvision pymupdf django-cors-headers tools plotly
-
+RUN pip install --no-cache-dir \
+    opencv-python \
+    torch \
+    torchvision \
+    pymupdf \
+    frontend \
+    tools \
+    plotly
+	
 RUN python backend/blizniaki_app/manage.py migrate
+	
+RUN rm -rf /tmp/* /var/tmp/* /usr/share/man /usr/share/doc /usr/share/doc-base
 
 EXPOSE 8000
 
