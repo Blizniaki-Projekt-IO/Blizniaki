@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install opencv-python torch torchvision pymupdf frontend tools plotly
+RUN pip install opencv-python torch torchvision pymupdf django-cors-headers tools plotly
 
 RUN python backend/blizniaki_app/manage.py migrate
 
