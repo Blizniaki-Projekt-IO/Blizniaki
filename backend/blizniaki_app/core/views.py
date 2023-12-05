@@ -19,15 +19,13 @@ class FaceUploadView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         image = request.data["image"]
         face = Face.objects.create(image=image)
-        request.session["face_id"] = face.pk
-        return JsonResponse({"message": "Twarz utworzona poprawnie!"}, status=200)
+        return JsonResponse({"face_id": face.pk}, status=200)
 
 
 class QuizUploadView(APIView):
     def post(self, request):
         try:
-            face = Face.objects.get(pk=request.session.get("face_id"))
-            del request.session["face_id"]
+            face = Face.objects.get(pk=request.data.get("face_id"))
             answers = request.data.get("character")
             result = predict(face.image.name, answers)
             raport = create_report(result)
@@ -39,8 +37,8 @@ class QuizUploadView(APIView):
             })
         except Face.DoesNotExist:
             return JsonResponse({
-                "face_id": request.session,
-            })
+                "error": "Face id nie pasuje",
+            }, status=401)
 
 
 class DownloadReportView(APIView):

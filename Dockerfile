@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir \
     torch \
     torchvision \
     pymupdf \
-    frontend \
+    django-cors-headers \
     tools \
     plotly
 	
