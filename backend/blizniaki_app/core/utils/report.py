@@ -59,20 +59,31 @@ def create_report(scores: dict):
     fig.update_layout({
         "plot_bgcolor": "rgba(255, 255, 255, 255)",
     })
-    path = os.path.join(MEDIA_ROOT, f'reports/output.png')
-    fig.write_image("output.png")
+    report_id = uuid.uuid4()
+    path = os.path.join(MEDIA_ROOT, f'reports/output_{report_id}.png')
+    fig.write_image(path)
 
     HTML = f"""
+    <html>
+    <head>
+    <title>Raport zwierzęcia - bliżniaki</title>
+    </head>
+    <body>
     <h1 style="font-weight: bold; font-size: 24px; margin-bottom: 16px;">Jakim zwierzęciem jesteś?</h1>
     <p>Czy kiedykolwiek zastanawiałeś się, jakie zwierzę idealnie odzwierciedla Twoją osobowość? Teraz masz okazję to sprawdzić! Nasza aplikacja skrupulatnie przeanalizowała Twoje zdjęcie, by dopasować Cię do pięciu fascynujących przedstawicieli zwierzęcego świata. Wyniki tej analizy, która pozwoli Ci poznać, z jakimi zwierzętami dzielisz najwięcej charakterystycznych cech znajdziesz poniżej na wykresie!</p>
-    <img src="output.png" style="width: 100%; margin-left: 10px;">
+    <img src="http://localhost:8000/media/reports/output_{report_id}.png" style="width: 100%; margin-left: 10px;">
     <p>Twoje zwierzę to<span style="font-weight: bold; margin-bottom: 16px; color: red;"> {animals[0]}</span>!</p>
     <p>{CONTENT.get(animals[0])}</p>
+    </body>
+    </html>
     """
 
     MEDIABOX = fitz.paper_rect("letter")
     WHERE = MEDIABOX + (36, 36, -36, -36)
-    filename = f'reports/raport_{uuid.uuid4()}.pdf'
+    filename = f'reports/raport_{report_id}.pdf'
+    filename_html = filename.replace("pdf", "html")
+    with open(os.path.join(MEDIA_ROOT, filename_html), "w") as f:
+        f.write(HTML)
     story = fitz.Story(html=HTML, archive=".")
     writer = fitz.DocumentWriter(os.path.join(MEDIA_ROOT, filename))
 
@@ -85,5 +96,7 @@ def create_report(scores: dict):
         writer.end_page()
 
     writer.close()
-    os.remove("output.png")
-    return filename
+    return {
+        "raport_pdf": filename,
+        "raport_html": filename_html,
+    }

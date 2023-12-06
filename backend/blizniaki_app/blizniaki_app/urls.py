@@ -14,14 +14,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
+from blizniaki_app import settings
 from core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/upload/', views.FaceUploadView.as_view(), name="upload"),
     path('api/quiz/', views.QuizUploadView.as_view(), name="quiz"),
-    path('api/report/', views.DownloadReportView.as_view(), name="report"),
-]
+    path('api/report/', views.DownloadReportPDFView.as_view(), name="report"),
+    path('api/report-html/', views.DownloadReportHTMLView.as_view(), name="report"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

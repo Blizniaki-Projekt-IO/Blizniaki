@@ -32,7 +32,7 @@ class QuizUploadView(APIView):
             answers = request.data.get("character")
             result = predict(face.image.name, answers)
             raport = create_report(result)
-            face.raport_url = raport
+            face.raport_url = raport.get("raport_pdf")
             face.save()
             return JsonResponse({
                 "result": result,
@@ -44,10 +44,19 @@ class QuizUploadView(APIView):
             }, status=401)
 
 
-class DownloadReportView(APIView):
+class DownloadReportPDFView(APIView):
     def post(self, request):
         report_url = request.data["report_url"]
         report = open(os.path.join(settings.MEDIA_ROOT, report_url), 'rb')
         response = HttpResponse(FileWrapper(report), content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename={report_url.replace("reports/", "")}'
+        return response
+
+
+class DownloadReportHTMLView(APIView):
+    def post(self, request):
+        report_url = request.data["report_url"]
+        report = open(os.path.join(settings.MEDIA_ROOT, report_url), 'rb')
+        response = HttpResponse(FileWrapper(report), content_type='html')
         response['Content-Disposition'] = f'attachment; filename={report_url.replace("reports/", "")}'
         return response

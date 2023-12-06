@@ -137,3 +137,5 @@ GitHub.sublime-settings
 
 /backend/env
 /backend/blizniaki_app/core/neurons/model_humanface_to_animal.pt
+/backend/blizniaki_app/media/faces/*
+/backend/blizniaki_app/media/reports/*
