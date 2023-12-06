@@ -4,7 +4,6 @@
 *.pyc
 __pycache__
 db.sqlite3
-media
 
 # Backup files # 
 *.bak 
@@ -137,3 +136,4 @@ GitHub.sublime-settings
 .history
 
 /backend/env
+/backend/blizniaki_app/core/neurons/model_humanface_to_animal.pt

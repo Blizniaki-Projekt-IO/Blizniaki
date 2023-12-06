@@ -1,5 +1,5 @@
 FROM python:3.9
-
+ENV PYTHONUNBUFFERED 1
 WORKDIR /backend
 
 COPY . /backend
@@ -20,7 +20,8 @@ RUN pip install --no-cache-dir \
     pymupdf \
     django-cors-headers \
     tools \
-    plotly
+    plotly \
+    kaleido
 	
 RUN python backend/blizniaki_app/manage.py migrate
 	
