@@ -1,11 +1,14 @@
 import base64
+import json
 import os
 from wsgiref.util import FileWrapper
 
 from django.http import HttpResponse, JsonResponse
+from rest_framework import status
 from rest_framework.generics import CreateAPIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from blizniaki_app import settings
 from core.models import Face
@@ -45,8 +48,8 @@ class QuizUploadView(APIView):
 
 
 class DownloadReportPDFView(APIView):
-    def post(self, request):
-        report_url = request.data["report_url"]
+    def get(self, request):
+        report_url = request.GET.get("report_url")
         report = open(os.path.join(settings.MEDIA_ROOT, report_url), 'rb')
         response = HttpResponse(FileWrapper(report), content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename={report_url.replace("reports/", "")}'
@@ -54,8 +57,8 @@ class DownloadReportPDFView(APIView):
 
 
 class DownloadReportHTMLView(APIView):
-    def post(self, request):
-        report_url = request.data["report_url"]
+    def get(self, request):
+        report_url = request.GET.get("report_url")
         report = open(os.path.join(settings.MEDIA_ROOT, report_url), 'rb')
         response = HttpResponse(FileWrapper(report), content_type='html')
         response['Content-Disposition'] = f'attachment; filename={report_url.replace("reports/", "")}'
